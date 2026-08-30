@@ -27,8 +27,10 @@ static server works just as well — the page loads ES modules, so opening
   shockwave. Ships caught in it take damage that falls off with distance, and
   anything that dies to a shockwave sets off its own — so a well-placed hit on a
   cruiser in a tight formation can clear half the screen.
-- **Chains pay.** Every link in a chain reaction raises the point multiplier;
-  the chain depth is shown over the wreck.
+- **Chains pay.** Every link in a chain reaction raises the point multiplier.
+  The crew calls each link as it goes &mdash; *secondary*, *cooking off*,
+  *breaking up* &mdash; so the escalation reads without the game narrating its
+  own mechanics.
 - **Convoys are the set piece.** From threat level 3, a banner warns you that a
   heavy ship is coming in alone. Seconds later a swarm of light ships is
   released behind it. The swarm is faster, so it closes the gap — and because
@@ -111,6 +113,7 @@ something other than the source.
 
 | File | What it covers |
 | --- | --- |
+| `copy.test.ts` | The player-facing voice: the callout ladder escalates, stays short enough to read, and nothing on screen names a mechanic |
 | `config.test.ts` | The design relationships the mechanics rest on: heavier means tougher, slower and deadlier; a scout blast reaches the next ship in a cloud; convoys cannot be scheduled before an anchor class exists |
 | `utils.test.ts` | Maths and colour helpers, including that `weightedIndex` follows its proportions |
 | `ship.test.ts` | Hull damage, the speed falloff, hit areas, smoke, staying inside the field |

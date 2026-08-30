@@ -119,3 +119,23 @@ export const CONVOY = {
   fighterChancePerLevel: 0.07,
   maxFighterChance: 0.4,
 } as const;
+
+/**
+ * What the gun crew shouts as a detonation runs through a formation, indexed
+ * by how many links deep the kill is. The escalation carries the scale, so the
+ * player reads magnitude without the game narrating its own mechanics. The
+ * last entry covers everything deeper.
+ */
+export const CASCADE_CALLOUTS: readonly string[] = [
+  'SECONDARY',
+  'COOKING OFF',
+  'BREAKING UP',
+  "FLIGHT'S GONE",
+  'SECTOR SWEPT',
+];
+
+/** The callout for a kill `depth` links into a cascade (depth 1 or more). */
+export function calloutForDepth(depth: number): string {
+  const index = Math.min(Math.max(depth, 1), CASCADE_CALLOUTS.length) - 1;
+  return CASCADE_CALLOUTS[index]!;
+}
