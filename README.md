@@ -38,6 +38,9 @@ static server works just as well — the page loads ES modules, so opening
   mid-field. Hold the last hit until they are inside the ring, then take the
   whole formation with one click. The ring pulses once the hull is one hit from
   death: that is your bomb, armed.
+
+![a burning cruiser anchor, its blast ring drawn around it, with the scout swarm closing in](docs/convoy.png)
+
 - **Pressure ramps up.** Ships spawn faster, fly faster, and heavier classes
   join the fight as the threat level rises (one level every 16 seconds).
 - **One breach and it's over.** If any ship crosses the line on the right, the
