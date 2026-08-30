@@ -1,4 +1,4 @@
-import { CONVOY, SHIP_TYPE_LIST, TUNING, scoreForType } from './config.js';
+import { CONVOY, SHIP_TYPE_LIST, TUNING, calloutForDepth, scoreForType } from './config.js';
 import { convoyInterval, convoyLaunchDelay, planConvoy } from './convoy.js';
 import { Effects, Explosion } from './effects.js';
 import { Ship, shipSpawnY } from './ship.js';
@@ -342,14 +342,14 @@ export class Game {
         this.effects.spawnBlast(ship.x, ship.y, scale, hexToRgb(ship.type.hullColor));
         this.effects.addShake(2 + ship.radius * 0.14);
         this.explosions.push(new Explosion(ship.x, ship.y, ship.type.blastRadius, ship.type.blastPower, chainDepth));
-        // Keep the label on screen even for kills right at the field edge.
-        const labelX = clamp(ship.x, 72, Math.max(72, this.width - 72));
         const labelY = ship.y - ship.radius - 10;
         if (chainDepth > 0) {
-            this.effects.spawnText(labelX, labelY, `CHAIN ×${chainDepth + 1}  +${gained}`, '#ffd479', Math.min(24, 14 + chainDepth * 2));
+            // Callouts are wider than a bare score, so they need more room to stay
+            // on screen for kills right at the field edge.
+            this.effects.spawnText(clamp(ship.x, 120, Math.max(120, this.width - 120)), labelY, `${calloutForDepth(chainDepth)}  +${gained}`, '#ffd479', Math.min(24, 14 + chainDepth * 2));
         }
         else {
-            this.effects.spawnText(labelX, labelY, `+${gained}`, '#bfe9ff', 15);
+            this.effects.spawnText(clamp(ship.x, 72, Math.max(72, this.width - 72)), labelY, `+${gained}`, '#bfe9ff', 15);
         }
         this.pushHud();
     }

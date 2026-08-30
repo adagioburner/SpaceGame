@@ -105,6 +105,8 @@ export class FakeCanvas extends FakeElement {
 /** Records how often each drawing call was made, and swallows the rest. */
 export class FakeContext {
   readonly calls = new Map<string, number>();
+  /** Every string the game has drawn, so tests can read its player-facing copy. */
+  readonly texts: string[] = [];
 
   // Settable state the game assigns to.
   fillStyle: unknown = '';
@@ -129,6 +131,7 @@ export class FakeContext {
 
   reset(): void {
     this.calls.clear();
+    this.texts.length = 0;
   }
 
   save(): void {
@@ -182,8 +185,9 @@ export class FakeContext {
   clearRect(): void {
     this.record('clearRect');
   }
-  fillText(): void {
+  fillText(text?: unknown): void {
     this.record('fillText');
+    if (typeof text === 'string') this.texts.push(text);
   }
   setLineDash(): void {
     this.record('setLineDash');

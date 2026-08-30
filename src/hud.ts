@@ -79,8 +79,8 @@ export class Hud {
     this.overlayTitle.textContent = 'SECTOR DEFENCE';
     this.overlayBody.innerHTML = `
       <p>Hostile ships enter from the left. <strong>Click them</strong> to open fire.</p>
-      <p>Bigger hulls soak up several hits, lose speed as they burn, and their
-         death blast can set off everything nearby &mdash; line them up for chains.</p>
+      <p>Bigger hulls soak up several hits and slow as they burn. When one
+         finally goes, it takes whatever is alongside it.</p>
       <p>Let a single ship reach the right-hand line and the sector falls.</p>
     `;
     this.overlayButton.textContent = 'Launch defence';
