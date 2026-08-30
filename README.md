@@ -103,6 +103,12 @@ npm run test:only     # skip the dist rebuild
 node --test "build-test/test/**/*.test.js" --test-name-pattern="cascade"
 ```
 
+Node 22 or newer. GitHub Actions runs the same steps on every pull request and
+on pushes to `main` (`.github/workflows/ci.yml`), with one extra check: it
+rebuilds `dist/` and fails if the committed output has drifted from `src/`,
+since the game is served straight from `dist/` and a stale build would ship
+something other than the source.
+
 | File | What it covers |
 | --- | --- |
 | `config.test.ts` | The design relationships the mechanics rest on: heavier means tougher, slower and deadlier; a scout blast reaches the next ship in a cloud; convoys cannot be scheduled before an anchor class exists |

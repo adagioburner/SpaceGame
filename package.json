@@ -2,6 +2,9 @@
   "name": "space-combat-game",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "description": "A browser-based space combat game written in TypeScript.",
   "scripts": {
     "build": "tsc",
