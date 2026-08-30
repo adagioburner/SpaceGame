@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Sector Defence — Space Combat</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hud">
+        <div class="stat stat--primary">
+          <span class="stat__label">Ships destroyed</span>
+          <span class="stat__value" id="stat-destroyed">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Points</span>
+          <span class="stat__value" id="stat-points">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Threat level</span>
+          <span class="stat__value" id="stat-level">1</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Time</span>
+          <span class="stat__value" id="stat-time">0:00</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Best</span>
+          <span class="stat__value" id="stat-best">0</span>
+        </div>
+      </header>
+
+      <main class="field-wrap">
+        <canvas id="field"></canvas>
+        <div class="level-banner" id="level-banner"></div>
+
+        <div class="overlay" id="overlay">
+          <div class="overlay__panel">
+            <h1 class="overlay__title" id="overlay-title">Sector Defence</h1>
+            <div class="overlay__body" id="overlay-body"></div>
+            <button class="overlay__button" id="overlay-button" type="button">Launch defence</button>
+            <p class="overlay__hint">Space / Enter to start &middot; P or Esc to pause</p>
+          </div>
+        </div>
+      </main>
+
+      <footer class="legend">
+        <span class="legend__item"><i style="--c: #7ee3c7"></i>Scout &middot; 1 hit</span>
+        <span class="legend__item"><i style="--c: #8fb8ff"></i>Fighter &middot; 2 hits</span>
+        <span class="legend__item"><i style="--c: #f0b46b"></i>Cruiser &middot; 4 hits</span>
+        <span class="legend__item"><i style="--c: #ef7d8e"></i>Dreadnought &middot; 7 hits</span>
+        <span class="legend__note">Bigger hulls make bigger blasts &mdash; chain them.</span>
+      </footer>
+    </div>
+
+    <script type="module" src="./dist/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "space-combat-game",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A browser-based space combat game written in TypeScript.",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "npm run build && npx --yes http-server . -p 8080 -c-1"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}
