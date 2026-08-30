@@ -39,10 +39,17 @@ export class Hud {
         }
     }
     flashLevel(level) {
-        this.levelBanner.textContent = `THREAT LEVEL ${level}`;
-        this.levelBanner.classList.remove('show');
+        this.flashBanner(`THREAT LEVEL ${level}`, 'info');
+    }
+    /** Momentary announcement across the play field. */
+    flashBanner(text, tone) {
+        this.levelBanner.textContent = text;
+        this.levelBanner.classList.remove('show', 'alert');
+        // Restart the CSS animation.
         void this.levelBanner.offsetWidth;
         this.levelBanner.classList.add('show');
+        if (tone === 'alert')
+            this.levelBanner.classList.add('alert');
     }
     showStart() {
         this.overlayTitle.textContent = 'SECTOR DEFENCE';

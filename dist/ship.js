@@ -7,6 +7,8 @@ export class Ship {
     constructor(type, x, y, fieldHeight) {
         this.id = nextShipId++;
         this.alive = true;
+        /** Set on the heavy ship a convoy is built around; draws the blast marker. */
+        this.isConvoyAnchor = false;
         this.scorches = [];
         /** 1 right after a hit, decaying to 0 — drives the white impact flash. */
         this.hitFlash = 0;
@@ -99,6 +101,8 @@ export class Ship {
         const severity = 1 - this.integrity;
         ctx.save();
         ctx.translate(this.x, this.y);
+        if (this.isConvoyAnchor)
+            this.drawAnchorMarker(ctx, s);
         this.drawThrust(ctx, s, severity);
         // Everything below is drawn in unit space and scaled up to the hull size.
         ctx.save();
@@ -136,6 +140,36 @@ export class Ship {
         ctx.restore();
         if (this.maxHull > 1)
             this.drawHullBar(ctx, s);
+        ctx.restore();
+    }
+    /**
+     * Convoy anchors are the player's bomb, so they advertise themselves: a
+     * dashed ring on the hull, and a faint circle showing how far the death
+     * blast reaches. Both brighten as the hull burns down — a ship one hit from
+     * death is "primed" and pulses.
+     */
+    drawAnchorMarker(ctx, s) {
+        const charge = 1 - this.integrity;
+        const primed = this.hull === 1;
+        const pulse = 0.5 + Math.sin(this.age * (primed ? 7 : 2.2)) * 0.5;
+        ctx.save();
+        // Blast reach.
+        const reachAlpha = 0.05 + charge * 0.12 + (primed ? pulse * 0.13 : 0);
+        ctx.strokeStyle = `rgba(255, 176, 90, ${reachAlpha.toFixed(3)})`;
+        ctx.lineWidth = primed ? 2 : 1.25;
+        ctx.setLineDash([10, 13]);
+        ctx.lineDashOffset = -this.age * 20;
+        ctx.beginPath();
+        ctx.arc(0, 0, this.type.blastRadius, 0, Math.PI * 2);
+        ctx.stroke();
+        // Target ring hugging the hull.
+        ctx.strokeStyle = `rgba(255, 212, 136, ${(0.45 + charge * 0.45).toFixed(3)})`;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 8]);
+        ctx.lineDashOffset = this.age * 26;
+        ctx.beginPath();
+        ctx.arc(0, 0, s * 1.35, 0, Math.PI * 2);
+        ctx.stroke();
         ctx.restore();
     }
     drawThrust(ctx, s, severity) {

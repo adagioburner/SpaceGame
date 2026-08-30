@@ -135,6 +135,11 @@ body {
   animation: banner 1.8s ease-out;
 }
 
+.level-banner.alert {
+  color: #ffc46b;
+  text-shadow: 0 0 20px rgba(255, 150, 60, 0.75);
+}
+
 @keyframes banner {
   0% { opacity: 0; letter-spacing: 0.1em; }
   20% { opacity: 1; }
