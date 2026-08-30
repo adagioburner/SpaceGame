@@ -1,4 +1,5 @@
-import { SHIP_TYPE_LIST, TUNING, scoreForType } from './config.js';
+import { CONVOY, SHIP_TYPE_LIST, TUNING, scoreForType } from './config.js';
+import { convoyInterval, convoyLaunchDelay, planConvoy } from './convoy.js';
 import { Effects, Explosion } from './effects.js';
 import { Ship, shipSpawnY } from './ship.js';
 import { Starfield } from './starfield.js';
@@ -24,6 +25,8 @@ export class Game {
         this.points = 0;
         this.best = 0;
         this.breachFlash = 0;
+        this.convoyTimer = 0;
+        this.pendingConvoy = null;
         this.canvas = canvas;
         this.hud = hud;
         const context = canvas.getContext('2d');
@@ -56,6 +59,9 @@ export class Game {
         this.points = 0;
         this.breachFlash = 0;
         this.spawnTimer = 0.6;
+        this.pendingConvoy = null;
+        // First convoy lands shortly after convoys unlock.
+        this.convoyTimer = TUNING.secondsPerLevel * (CONVOY.fromLevel - 1) + 6;
         this.state = 'running';
         this.hud.hideOverlay();
         this.pushHud();
@@ -202,6 +208,48 @@ export class Game {
         const x = -type.radius - 6 + offsetX;
         this.ships.push(new Ship(type, x, y, this.height));
     }
+    // ------------------------------------------------------------------- convoy
+    updateConvoy(dt) {
+        if (this.pendingConvoy) {
+            // The swarm flies whether or not the anchor survived: killing the heavy
+            // early costs the player their bomb, it does not call off the attack.
+            if (this.elapsed >= this.pendingConvoy.launchAt)
+                this.releaseConvoySwarm();
+            return;
+        }
+        // The clock runs from the start of the game; only the launch waits for
+        // convoys to unlock, so the first one lands soon after that level.
+        this.convoyTimer -= dt;
+        if (this.convoyTimer <= 0 && this.level >= CONVOY.fromLevel)
+            this.startConvoy();
+    }
+    /** Sends in the heavy and schedules the swarm that will chase it down. */
+    startConvoy() {
+        const plan = planConvoy(this.level, this.height);
+        const anchor = new Ship(plan.anchorType, -plan.anchorType.radius - 6, plan.anchorY, this.height);
+        this.ships.push(anchor);
+        this.pendingConvoy = {
+            anchorY: plan.anchorY,
+            members: plan.members,
+            launchAt: this.elapsed + convoyLaunchDelay(plan.anchorType, this.width, this.speedMultiplier),
+        };
+        this.convoyTimer = convoyInterval(this.level);
+        this.hud.flashBanner(`${plan.anchorType.label.toUpperCase()} CONVOY INBOUND`, 'alert');
+    }
+    releaseConvoySwarm() {
+        const convoy = this.pendingConvoy;
+        if (!convoy)
+            return;
+        this.pendingConvoy = null;
+        for (const member of convoy.members) {
+            const margin = member.type.radius + 6;
+            const y = clamp(convoy.anchorY + member.dy, margin, Math.max(margin, this.height - margin));
+            this.ships.push(new Ship(member.type, -member.type.radius - 6 + member.dx, y, this.height));
+        }
+        // Give the cloud a moment of clear space so it reads as one formation.
+        this.spawnTimer = Math.max(this.spawnTimer, 2.2);
+        this.hud.flashBanner('SWARM CLOSING', 'alert');
+    }
     // -------------------------------------------------------------------- update
     frame(time) {
         const dt = Math.min(0.05, Math.max(0, (time - this.lastFrame) / 1000));
@@ -237,6 +285,7 @@ export class Game {
             this.spawnWave();
             this.spawnTimer = this.nextSpawnInterval();
         }
+        this.updateConvoy(dt);
         const multiplier = this.speedMultiplier;
         let breachY = null;
         for (const ship of this.ships) {
@@ -293,12 +342,14 @@ export class Game {
         this.effects.spawnBlast(ship.x, ship.y, scale, hexToRgb(ship.type.hullColor));
         this.effects.addShake(2 + ship.radius * 0.14);
         this.explosions.push(new Explosion(ship.x, ship.y, ship.type.blastRadius, ship.type.blastPower, chainDepth));
+        // Keep the label on screen even for kills right at the field edge.
+        const labelX = clamp(ship.x, 72, Math.max(72, this.width - 72));
         const labelY = ship.y - ship.radius - 10;
         if (chainDepth > 0) {
-            this.effects.spawnText(ship.x, labelY, `CHAIN ×${chainDepth + 1}  +${gained}`, '#ffd479', Math.min(24, 14 + chainDepth * 2));
+            this.effects.spawnText(labelX, labelY, `CHAIN ×${chainDepth + 1}  +${gained}`, '#ffd479', Math.min(24, 14 + chainDepth * 2));
         }
         else {
-            this.effects.spawnText(ship.x, labelY, `+${gained}`, '#bfe9ff', 15);
+            this.effects.spawnText(labelX, labelY, `+${gained}`, '#bfe9ff', 15);
         }
         this.pushHud();
     }

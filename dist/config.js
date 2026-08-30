@@ -81,4 +81,36 @@ export const TUNING = {
     /** Seconds a kill stays "recent" for chain-bonus purposes. */
     chainWindow: 0.85,
 };
+/**
+ * A convoy is a scripted set piece: one heavy ship, then a swarm of light ones
+ * released behind it. The swarm is faster, so it closes on the heavy — and the
+ * more the player has damaged (and slowed) the heavy, the sooner they meet.
+ * Detonating the heavy inside the swarm is the big chain-reaction payoff.
+ */
+export const CONVOY = {
+    /** Threat level at which convoys start showing up. */
+    fromLevel: 3,
+    /** Seconds between convoys at that level, shortening as levels rise. */
+    interval: 26,
+    intervalDecay: 0.92,
+    minInterval: 15,
+    /**
+     * How far across the field the anchor would travel, at full speed, before its
+     * swarm is released. Bigger = a longer gap for the swarm to close.
+     */
+    launchFraction: 0.34,
+    /** Swarm size at `fromLevel`, its growth per level, and the ceiling. */
+    baseSwarmSize: 5,
+    swarmGrowth: 0.9,
+    maxSwarmSize: 12,
+    /** How deep the cloud is front-to-back, in px. */
+    depth: 200,
+    /** Vertical half-spread of the cloud, as a fraction of the anchor's blast. */
+    laneSpread: 0.52,
+    /** Minimum gap between cloud members so they stay individually clickable. */
+    minSpacing: 54,
+    /** Chance a cloud member is a fighter rather than a scout, per level above fromLevel. */
+    fighterChancePerLevel: 0.07,
+    maxFighterChance: 0.4,
+};
 //# sourceMappingURL=config.js.map
