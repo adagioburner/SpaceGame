@@ -29,17 +29,15 @@ static server works just as well — the page loads ES modules, so opening
   cruiser in a tight formation can clear half the screen.
 - **Chains pay.** Every link in a chain reaction raises the point multiplier;
   the chain depth is shown over the wreck.
-- **Convoys are the set piece.** From threat level 3, a heavy ship arrives
-  alone, ringed with a dashed marker and a faint circle showing how far its
-  death blast reaches. Seconds later a swarm of light ships is released behind
-  it. The swarm is faster, so it closes the gap — and because damage slows the
-  heavy down, *how hard you hit it decides where they meet*. Leave it untouched
-  and the swarm never catches up; soften it and the cloud piles into your bomb
-  mid-field. Hold the last hit until they are inside the ring, then take the
-  whole formation with one click. The ring pulses once the hull is one hit from
-  death: that is your bomb, armed.
+- **Convoys are the set piece.** From threat level 3, a banner warns you that a
+  heavy ship is coming in alone. Seconds later a swarm of light ships is
+  released behind it. The swarm is faster, so it closes the gap — and because
+  damage slows the heavy down, *how hard you hit it decides where they meet*.
+  Leave it untouched and the swarm never catches up; soften it and the cloud
+  piles into your bomb mid-field. Judge the reach by eye and hold the last hit
+  until they are packed around it, then take the whole formation with one click.
 
-![a burning cruiser anchor, its blast ring drawn around it, with the scout swarm closing in](docs/convoy.png)
+![a burning cruiser leading a convoy, with the scout swarm closing in behind it](docs/convoy.png)
 
 - **Pressure ramps up.** Ships spawn faster, fly faster, and heavier classes
   join the fight as the threat level rises (one level every 16 seconds).

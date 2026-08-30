@@ -227,7 +227,6 @@ export class Game {
     startConvoy() {
         const plan = planConvoy(this.level, this.height);
         const anchor = new Ship(plan.anchorType, -plan.anchorType.radius - 6, plan.anchorY, this.height);
-        anchor.isConvoyAnchor = true;
         this.ships.push(anchor);
         this.pendingConvoy = {
             anchorY: plan.anchorY,

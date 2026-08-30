@@ -276,7 +276,6 @@ export class Game {
       plan.anchorY,
       this.height,
     );
-    anchor.isConvoyAnchor = true;
     this.ships.push(anchor);
 
     this.pendingConvoy = {
